@@ -33,63 +33,40 @@ interface Props {
 export function ReelItem({
   reel, active, muted, onToggleMute, onOpenComments, commentsOpen, onCloseComments,
 }: Props) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [paused, setPaused] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
 
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (active) {
-      v.currentTime = 0;
-      v.play().catch(() => {});
-      setPaused(false);
-    } else {
-      v.pause();
+  const embedSrc = (() => {
+    try {
+      const u = new URL(reel.embed_url);
+      if (muted) u.searchParams.set("mute", "1");
+      return u.toString();
+    } catch {
+      return reel.embed_url;
     }
-  }, [active]);
-
-  const togglePlay = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.paused) {
-      v.play().catch(() => {});
-      setPaused(false);
-    } else {
-      v.pause();
-      setPaused(true);
-    }
-  };
+  })();
 
   return (
     <section className="relative h-full w-full snap-start snap-always overflow-hidden bg-black">
-      <video
-        ref={videoRef}
-        src={reel.video_url}
-        poster={reel.cover_url ?? undefined}
-        loop
-        muted={muted}
-        playsInline
-        preload="metadata"
-        onClick={togglePlay}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      {active ? (
+        <iframe
+          key={`${reel.id}-${muted ? "m" : "u"}`}
+          src={embedSrc}
+          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write"
+          allowFullScreen
+          className="absolute inset-0 h-full w-full border-0"
+          title={`Reel by ${reel.author_username}`}
+        />
+      ) : reel.cover_url ? (
+        <img
+          src={reel.cover_url}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : null}
 
-      {/* gradient overlays */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black/80 to-transparent" />
-
-      {/* play overlay */}
-      {paused && (
-        <button
-          onClick={togglePlay}
-          className="absolute inset-0 z-10 flex items-center justify-center"
-          aria-label="Play"
-        >
-          <Play className="h-20 w-20 text-white/80" fill="currentColor" />
-        </button>
-      )}
 
       {/* topic badge */}
       {reel.topic && (
