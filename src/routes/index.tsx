@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { z } from "zod";
 import { ReelsFeed } from "@/components/reels/ReelsFeed";
 
@@ -21,6 +22,18 @@ function Index() {
   const { nodemo } = Route.useSearch();
   const isLive = nodemo === true || nodemo === "true";
   const mode = isLive ? "real" : "demo";
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLive) return;
+    try {
+      if (localStorage.getItem("hg_onboarded") !== "1") {
+        navigate({ to: "/onboarding", replace: true });
+      }
+    } catch {
+      // ignore
+    }
+  }, [isLive, navigate]);
 
   return (
     <div className="min-h-[100dvh] w-full bg-gradient-to-br from-neutral-950 via-black to-neutral-900 text-white">
