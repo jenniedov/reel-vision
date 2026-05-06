@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      reels: {
+        Row: {
+          approved_for_demo: boolean
+          author_username: string
+          block_reason: string | null
+          blocked: boolean
+          caption: string
+          comments_count: number
+          cover_url: string | null
+          created_at: string
+          display_order: number
+          hashtags: string[]
+          id: number
+          likes: number
+          top_comments: Json
+          topic: string | null
+          video_url: string
+          views: number
+        }
+        Insert: {
+          approved_for_demo?: boolean
+          author_username: string
+          block_reason?: string | null
+          blocked?: boolean
+          caption?: string
+          comments_count?: number
+          cover_url?: string | null
+          created_at?: string
+          display_order?: number
+          hashtags?: string[]
+          id?: number
+          likes?: number
+          top_comments?: Json
+          topic?: string | null
+          video_url: string
+          views?: number
+        }
+        Update: {
+          approved_for_demo?: boolean
+          author_username?: string
+          block_reason?: string | null
+          blocked?: boolean
+          caption?: string
+          comments_count?: number
+          cover_url?: string | null
+          created_at?: string
+          display_order?: number
+          hashtags?: string[]
+          id?: number
+          likes?: number
+          top_comments?: Json
+          topic?: string | null
+          video_url?: string
+          views?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
