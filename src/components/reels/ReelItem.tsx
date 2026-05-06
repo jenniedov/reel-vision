@@ -153,7 +153,10 @@ export function ReelItem({
       )}
 
       {/* right action rail (sits above bottom nav) */}
-      <div className="absolute bottom-20 right-3 z-20 flex flex-col items-center gap-5 text-white">
+      <div
+        className="absolute right-3 z-20 flex flex-col items-center gap-5 text-white"
+        style={{ bottom: "calc(5rem + env(safe-area-inset-bottom))" }}
+      >
         <button onClick={() => setLiked((v) => !v)} className="flex flex-col items-center gap-1">
           <Heart
             className={`h-8 w-8 drop-shadow-lg ${liked ? "fill-red-500 stroke-red-500" : ""}`}
@@ -188,7 +191,10 @@ export function ReelItem({
       </div>
 
       {/* bottom-left caption */}
-      <div className="absolute bottom-16 left-3 right-20 z-20 text-white">
+      <div
+        className="absolute left-3 right-20 z-20 text-white"
+        style={{ bottom: "calc(4rem + env(safe-area-inset-bottom))" }}
+      >
         {/* author row: avatar + name + verified + Follow */}
         <div className="flex items-center gap-2.5">
           {reel.author_profile_pic_url ? (
@@ -268,7 +274,13 @@ export function ReelItem({
 
 function BottomNav() {
   return (
-    <div className="absolute inset-x-0 bottom-0 z-20 flex h-14 items-center justify-around border-t border-white/10 bg-black px-4 text-white">
+    <div
+      className="absolute inset-x-0 bottom-0 z-20 flex items-center justify-around border-t border-white/10 bg-black px-4 text-white"
+      style={{
+        height: "calc(3.5rem + env(safe-area-inset-bottom))",
+        paddingBottom: "env(safe-area-inset-bottom)",
+      }}
+    >
       {/* home */}
       <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2}>
         <path d="M3 12l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1z" strokeLinejoin="round" strokeLinecap="round" />
