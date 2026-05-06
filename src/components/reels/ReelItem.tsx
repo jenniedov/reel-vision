@@ -5,7 +5,8 @@ import { CommentsSheet, type ReelComment } from "./CommentsSheet";
 
 export interface Reel {
   id: number;
-  video_url: string;
+  embed_url: string;
+  video_url: string | null;
   cover_url: string | null;
   caption: string;
   author_username: string;
