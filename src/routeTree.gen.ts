@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as FilteredoutRouteImport } from './routes/filteredout'
 import { Route as IndexRouteImport } from './routes/index'
 
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilteredoutRoute = FilteredoutRouteImport.update({
+  id: '/filteredout',
+  path: '/filteredout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/filteredout': typeof FilteredoutRoute
   '/onboarding': typeof OnboardingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/filteredout': typeof FilteredoutRoute
   '/onboarding': typeof OnboardingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/filteredout': typeof FilteredoutRoute
   '/onboarding': typeof OnboardingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/onboarding'
+  fullPaths: '/' | '/filteredout' | '/onboarding'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboarding'
-  id: '__root__' | '/' | '/onboarding'
+  to: '/' | '/filteredout' | '/onboarding'
+  id: '__root__' | '/' | '/filteredout' | '/onboarding'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FilteredoutRoute: typeof FilteredoutRoute
   OnboardingRoute: typeof OnboardingRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/filteredout': {
+      id: '/filteredout'
+      path: '/filteredout'
+      fullPath: '/filteredout'
+      preLoaderRoute: typeof FilteredoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,8 +87,19 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FilteredoutRoute: FilteredoutRoute,
   OnboardingRoute: OnboardingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
