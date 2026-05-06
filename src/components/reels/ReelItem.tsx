@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heart, MessageCircle, Send, MoreHorizontal } from "lucide-react";
-import type { Reel } from "@/server/reels.server";
+import type { Reel } from "@/types/reel";
 import { formatCount } from "@/lib/format";
 import { CommentsSheet } from "./CommentsSheet";
 

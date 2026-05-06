@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import type { ReelComment } from "@/server/reels.server";
+import type { ReelComment } from "@/types/reel";
 import { formatCount, relativeTime } from "@/lib/format";
 
 interface Props {

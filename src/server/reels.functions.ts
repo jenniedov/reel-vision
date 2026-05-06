@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { queryReels, type Reel } from "./reels.server";
-
-export type { Reel, ReelComment } from "./reels.server";
+import { queryReels } from "./reels.server";
+import type { Reel } from "@/types/reel";
 
 export const fetchReels = createServerFn({ method: "GET" }).handler(
   async (): Promise<Reel[]> =>
