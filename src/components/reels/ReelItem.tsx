@@ -4,7 +4,6 @@ import {
   MessageCircle,
   Send,
   MoreHorizontal,
-  Volume2,
   VolumeX,
   Repeat2,
   BadgeCheck,
