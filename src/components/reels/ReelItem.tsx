@@ -80,19 +80,26 @@ export function ReelItem({
           muted={muted}
           playsInline
           autoPlay={active}
-          onClick={() => setMuted((m) => !m)}
+          onClick={handleTap}
           className="absolute inset-0 h-full w-full object-cover"
         />
       ) : active ? (
-        <iframe
-          key={reel.id}
-          src={reel.embed_url}
-          allow="autoplay; encrypted-media; picture-in-picture; clipboard-write"
-          allowFullScreen
-          scrolling="no"
-          className="absolute left-1/2 top-1/2 h-[140%] w-[120%] -translate-x-1/2 -translate-y-1/2 border-0"
-          title={`Reel by ${reel.author_username}`}
-        />
+        <>
+          <iframe
+            key={reel.id}
+            src={reel.embed_url}
+            allow="autoplay; encrypted-media; picture-in-picture; clipboard-write"
+            allowFullScreen
+            scrolling="no"
+            className="absolute left-1/2 top-1/2 h-[140%] w-[120%] -translate-x-1/2 -translate-y-1/2 border-0"
+            title={`Reel by ${reel.author_username}`}
+          />
+          {/* tap layer for double-tap like over iframe (top area only, leaves controls clickable) */}
+          <div
+            onClick={handleTap}
+            className="absolute inset-x-0 top-0 z-10 h-1/2"
+          />
+        </>
       ) : reel.cover_url ? (
         <img
           src={reel.cover_url}
@@ -101,14 +108,30 @@ export function ReelItem({
         />
       ) : null}
 
-      {/* mute / unmute */}
-      {reel.video_url && (
+      {/* double-tap heart animation */}
+      {showHeart && (
+        <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
+          <Heart
+            className="h-28 w-28 fill-red-500 stroke-white drop-shadow-2xl"
+            style={{ animation: "reelHeartPop 800ms ease-out forwards" }}
+          />
+          <style>{`@keyframes reelHeartPop {
+            0% { transform: scale(0.4); opacity: 0; }
+            30% { transform: scale(1.15); opacity: 1; }
+            70% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0; }
+          }`}</style>
+        </div>
+      )}
+
+      {/* mute icon — only shown when muted */}
+      {reel.video_url && muted && (
         <button
-          onClick={() => setMuted((m) => !m)}
+          onClick={() => setMuted(false)}
           className="absolute right-3 top-3 z-30 rounded-full bg-black/50 p-2 text-white backdrop-blur-md transition hover:bg-black/70"
-          aria-label={muted ? "Unmute" : "Mute"}
+          aria-label="Unmute"
         >
-          {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          <VolumeX className="h-4 w-4" />
         </button>
       )}
 
