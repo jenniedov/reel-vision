@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Heart, MessageCircle, Send, MoreHorizontal, Volume2, VolumeX, Play } from "lucide-react";
+import { useState } from "react";
+import { Heart, MessageCircle, Send, MoreHorizontal, Volume2, VolumeX } from "lucide-react";
 import { formatCount, humanizeTopic } from "@/lib/format";
 import { CommentsSheet, type ReelComment } from "./CommentsSheet";
 
