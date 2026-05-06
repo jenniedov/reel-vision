@@ -1,6 +1,6 @@
 const EXTERNAL_URL = "https://xmmwkpndmphziqapnhbk.supabase.co";
 
-export interface ExternalReelComment {
+export interface ReelComment {
   username: string;
   text: string;
   likes: number;
@@ -9,31 +9,33 @@ export interface ExternalReelComment {
   profile_pic_url?: string;
 }
 
-export interface ExternalReel {
+export interface Reel {
   id: number;
+  url: string | null;
   embed_url: string;
-  video_url: string | null;
   cover_url: string | null;
   caption: string;
   author_username: string;
+  author_followers: number;
   likes: number;
   comments_count: number;
   views: number;
-  top_comments: ExternalReelComment[];
+  shares: number;
   hashtags: string[];
   topic: string | null;
+  top_comments: ReelComment[];
+  post_date: string | null;
   blocked: boolean;
   block_reason: string | null;
   display_order: number;
 }
 
-export async function queryExternalReels(filter: string): Promise<ExternalReel[]> {
+export async function queryReels(filter: string): Promise<Reel[]> {
   const key = process.env.EXTERNAL_SUPABASE_ANON_KEY;
   if (!key) throw new Error("Missing EXTERNAL_SUPABASE_ANON_KEY");
-  const url = `${EXTERNAL_URL}/rest/v1/reels?select=*&${filter}`;
-  const res = await fetch(url, {
+  const res = await fetch(`${EXTERNAL_URL}/rest/v1/reels?select=*&${filter}`, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
   });
-  if (!res.ok) throw new Error(`External reels fetch failed: ${res.status}`);
-  return (await res.json()) as ExternalReel[];
+  if (!res.ok) throw new Error(`Reels fetch failed: ${res.status}`);
+  return (await res.json()) as Reel[];
 }
