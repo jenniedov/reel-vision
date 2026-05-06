@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import type { ReelComment } from "@/types/reel";
 import { formatCount, relativeTime } from "@/lib/format";
 
@@ -74,7 +74,7 @@ export function CommentsSheet({ open, onClose, comments, totalCount }: Props) {
 
         <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3">
           {sorted.map((c, i) => (
-            <div key={i} className="flex gap-3 py-3">
+            <div key={i} className="flex items-start gap-3 py-3">
               <img
                 src={
                   c.profile_pic_url ||
@@ -102,6 +102,7 @@ export function CommentsSheet({ open, onClose, comments, totalCount }: Props) {
                   )}
                 </div>
               </div>
+              <CommentLikeButton initialLikes={c.likes} />
             </div>
           ))}
           {sorted.length === 0 && (
@@ -112,5 +113,23 @@ export function CommentsSheet({ open, onClose, comments, totalCount }: Props) {
         </div>
       </div>
     </>
+  );
+}
+
+function CommentLikeButton({ initialLikes }: { initialLikes: number }) {
+  const [liked, setLiked] = useState(false);
+  const count = initialLikes + (liked ? 1 : 0);
+  return (
+    <button
+      onClick={() => setLiked((v) => !v)}
+      className="flex flex-shrink-0 flex-col items-center gap-0.5 pt-1 text-neutral-400"
+      aria-label={liked ? "Unlike comment" : "Like comment"}
+    >
+      <Heart
+        className={`h-3.5 w-3.5 ${liked ? "fill-red-500 stroke-red-500" : ""}`}
+        strokeWidth={2}
+      />
+      {count > 0 && <span className="text-[10px]">{formatCount(count)}</span>}
+    </button>
   );
 }
