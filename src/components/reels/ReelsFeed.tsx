@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { ReelItem, type Reel } from "./ReelItem";
+import {
+  fetchExternalReels,
+  fetchExternalReelsBlocked,
+} from "@/server/external-reels.functions";
 
 interface Props {
   showFiltered: boolean;
@@ -11,12 +14,10 @@ export function ReelsFeed({ showFiltered }: Props) {
   const { data, isLoading, error } = useQuery({
     queryKey: ["reels", showFiltered ? "filtered" : "approved"],
     queryFn: async (): Promise<Reel[]> => {
-      const q = supabase.from("reels").select("*").eq("approved_for_demo", true);
-      const { data, error } = showFiltered
-        ? await q.eq("blocked", true).order("id", { ascending: true })
-        : await q.eq("blocked", false).order("display_order", { ascending: true });
-      if (error) throw error;
-      return (data ?? []) as unknown as Reel[];
+      const rows = showFiltered
+        ? await fetchExternalReelsBlocked()
+        : await fetchExternalReels();
+      return rows as unknown as Reel[];
     },
   });
 
