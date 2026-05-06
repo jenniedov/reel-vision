@@ -30,7 +30,9 @@ export function ReelItem({
 }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
+  const [showHeart, setShowHeart] = useState(false);
+  const lastTapRef = useRef(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -38,11 +40,30 @@ export function ReelItem({
     if (!v) return;
     if (active) {
       v.currentTime = 0;
-      v.play().catch(() => {});
+      v.muted = muted;
+      v.play().catch(() => {
+        // Autoplay with sound blocked → fall back to muted
+        setMuted(true);
+        v.muted = true;
+        v.play().catch(() => {});
+      });
     } else {
       v.pause();
     }
-  }, [active]);
+  }, [active, muted]);
+
+  const handleTap = () => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 300) {
+      // double tap → like
+      setLiked(true);
+      setShowHeart(true);
+      window.setTimeout(() => setShowHeart(false), 800);
+      lastTapRef.current = 0;
+    } else {
+      lastTapRef.current = now;
+    }
+  };
 
   // Approximate "shares" with 1/20 of likes for a plausible visual count
   const sharesDisplay = Math.max(1, Math.floor(reel.likes / 20));
