@@ -1,16 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ReelItem } from "./ReelItem";
-import { fetchReels, fetchBlockedReels } from "@/server/reels.functions";
+import { fetchReels, fetchBlockedReels, fetchRealReels } from "@/lib/reels.functions";
+
+type Mode = "demo" | "filtered" | "real";
 
 interface Props {
-  showFiltered: boolean;
+  mode?: Mode;
+  /** @deprecated use `mode` */
+  showFiltered?: boolean;
 }
 
-export function ReelsFeed({ showFiltered }: Props) {
+export function ReelsFeed({ mode, showFiltered }: Props) {
+  const resolvedMode: Mode = mode ?? (showFiltered ? "filtered" : "demo");
   const { data, isLoading, error } = useQuery({
-    queryKey: ["reels", showFiltered ? "blocked" : "approved"],
-    queryFn: () => (showFiltered ? fetchBlockedReels() : fetchReels()),
+    queryKey: ["reels", resolvedMode],
+    queryFn: () => {
+      if (resolvedMode === "real") return fetchRealReels();
+      if (resolvedMode === "filtered") return fetchBlockedReels();
+      return fetchReels();
+    },
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,8 +74,20 @@ export function ReelsFeed({ showFiltered }: Props) {
   }
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-500">
-        No reels
+      <div className="flex h-full flex-col items-center justify-center px-6 text-center text-sm text-neutral-400">
+        {resolvedMode === "real" ? (
+          <>
+            <div className="text-base font-semibold text-neutral-300">
+              No live reels yet
+            </div>
+            <div className="mt-2 text-xs">
+              Run the agent (<code className="font-mono">python main.py</code>) and
+              they'll appear here.
+            </div>
+          </>
+        ) : (
+          "No reels"
+        )}
       </div>
     );
   }

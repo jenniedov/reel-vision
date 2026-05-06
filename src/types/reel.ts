@@ -11,10 +11,13 @@ export interface Reel {
   id: number;
   url: string | null;
   embed_url: string;
+  video_url: string | null;
   cover_url: string | null;
   caption: string;
   author_username: string;
   author_followers: number;
+  author_profile_pic_url: string | null;
+  author_verified: boolean;
   likes: number;
   comments_count: number;
   views: number;
