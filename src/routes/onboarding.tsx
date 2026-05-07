@@ -7,11 +7,11 @@ export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
   head: () => ({
     meta: [
-      { title: "Welcome to HealthyGram" },
+      { title: "Welcome to GooseGram" },
       {
         name: "description",
         content:
-          "HealthyGram is a feed that's actually good for you — no doom, no comparison bait.",
+          "GooseGram is a feed that's actually good for you — no doom, no comparison bait.",
       },
     ],
   }),
@@ -72,7 +72,7 @@ function Onboarding() {
               </div>
             </div>
             <h1 className="mt-5 bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent">
-              HealthyGram
+              GooseGram
             </h1>
             <p className="mt-2 text-sm text-neutral-400">
               your feed, but actually good for you
