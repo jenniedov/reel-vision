@@ -6,11 +6,11 @@ export const Route = createFileRoute("/filteredout")({
   component: FilteredOut,
   head: () => ({
     meta: [
-      { title: "Filtered out — GooseGram" },
+      { title: "Filtered out — GoodGram" },
       {
         name: "description",
         content:
-          "Reels GooseGram filtered out so they never reach your feed, with the reason for each.",
+          "Reels GoodGram filtered out so they never reach your feed, with the reason for each.",
       },
     ],
   }),

@@ -1,6 +1,6 @@
-# 🪿 reel-vision
+# ✨ reel-vision
 
-The frontend for **[GooseGram](https://github.com/jenniedov/goosegram)** — an
+The frontend for **[GoodGram](https://github.com/jenniedov/goodgram)** — an
 AI-curated Instagram Reels feed that filters out anxiety bait and surfaces
 what actually feels good.
 
@@ -43,7 +43,7 @@ For Lovable hosting: set `EXTERNAL_SUPABASE_ANON_KEY` in
 
 ## Where the data comes from
 
-Run the [GooseGram agent](https://github.com/jenniedov/goosegram) to populate
+Run the [GoodGram agent](https://github.com/jenniedov/goodgram) to populate
 the `reels` table — the agent handles the Apify scrape, Claude scoring,
 video frame extraction, and Supabase writes. This frontend is just a reader.
 
